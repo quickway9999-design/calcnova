@@ -1,0 +1,81 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Free online calculators for percentage, compound interest, EMI, age and more.">
+  <title>CalcNova — Free Calculators for Everyone</title>
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Arial,sans-serif;background:#f4f8ff;color:#17243b}
+    header{background:#fff;padding:18px 5%;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 10px #dce5f3}
+    .logo{font-size:27px;font-weight:bold;color:#1769e0}
+    .hero{text-align:center;padding:40px 16px 28px;background:#e8f1ff}
+    h1{font-size:32px;margin:5px}
+    .hero p{color:#52627a}
+    #search{width:min(100%,520px);padding:15px;border:1px solid #b9cbea;border-radius:12px;font-size:16px;margin-top:15px}
+    main{max-width:1100px;margin:28px auto;padding:0 16px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
+    .card{background:#fff;padding:18px;border-radius:14px;box-shadow:0 3px 12px #dce5f3}
+    .card h3{margin-top:0;color:#1769e0}
+    input,select{width:100%;padding:11px;margin:6px 0;border:1px solid #c8d5e8;border-radius:8px;font-size:15px}
+    button{background:#1769e0;color:white;border:0;border-radius:8px;padding:11px 14px;font-size:15px;cursor:pointer}
+    .result{font-weight:bold;overflow-wrap:anywhere;margin-top:12px}
+    footer{text-align:center;padding:28px;color:#617087}
+    @media(max-width:480px){h1{font-size:26px}.grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<header><div class="logo">✦ CalcNova</div><span>Free Calculators</span></header>
+<section class="hero">
+  <h1>Free Calculators for Everyone</h1>
+  <p>Simple, fast and free online tools.</p>
+  <input id="search" placeholder="Search calculators..." oninput="filterCards()">
+</section>
+<main>
+  <h2>Popular Calculators</h2>
+  <div class="grid" id="grid">
+    <section class="card" data-name="basic calculator"><h3>Basic Calculator</h3>
+      <input id="a" type="number" placeholder="First number"><select id="op"><option value="+">Add (+)</option><option value="-">Subtract (−)</option><option value="*">Multiply (×)</option><option value="/">Divide (÷)</option></select><input id="b" type="number" placeholder="Second number"><button onclick="basic()">Calculate</button><div class="result" id="r1"></div></section>
+    <section class="card" data-name="percentage calculator"><h3>Percentage Calculator</h3><input id="p1" type="number" placeholder="Percentage (%)"><input id="p2" type="number" placeholder="Number"><button onclick="show('r2',num('p1')/100*num('p2'))">Calculate</button><div class="result" id="r2"></div></section>
+    <section class="card" data-name="compound interest"><h3>Compound Interest Calculator ⭐</h3><input id="ci" type="number" placeholder="Initial amount (₹)"><input id="cr" type="number" placeholder="Annual interest rate (%)"><input id="cy" type="number" placeholder="Years"><button onclick="compound()">Calculate</button><div class="result" id="r3"></div></section>
+    <section class="card" data-name="loan emi"><h3>Loan EMI Calculator</h3><input id="loan" type="number" placeholder="Loan amount (₹)"><input id="lr" type="number" placeholder="Annual interest rate (%)"><input id="ly" type="number" placeholder="Years"><button onclick="emi()">Calculate</button><div class="result" id="r4"></div></section>
+    <section class="card" data-name="age calculator"><h3>Age Calculator</h3><input id="dob" type="date"><button onclick="age()">Calculate</button><div class="result" id="r5"></div></section>
+    <section class="card" data-name="simple interest"><h3>Simple Interest Calculator</h3><input id="si" type="number" placeholder="Principal (₹)"><input id="sr" type="number" placeholder="Annual rate (%)"><input id="sy" type="number" placeholder="Years"><button onclick="show('r6',num('si')*num('sr')*num('sy')/100)">Calculate</button><div class="result" id="r6"></div></section>
+    <section class="card" data-name="sip calculator"><h3>SIP Calculator</h3><input id="sm" type="number" placeholder="Monthly investment (₹)"><input id="srate" type="number" placeholder="Expected annual return (%)"><input id="syears" type="number" placeholder="Years"><button onclick="sip()">Estimate</button><div class="result" id="r7"></div></section>
+    <section class="card" data-name="discount calculator"><h3>Discount Calculator</h3><input id="dp" type="number" placeholder="Original price (₹)"><input id="dd" type="number" placeholder="Discount (%)"><button onclick="show('r8','Final price: ₹'+(num('dp')*(1-num('dd')/100)).toFixed(2))">Calculate</button><div class="result" id="r8"></div></section>
+    <section class="card" data-name="gst calculator"><h3>GST Calculator</h3><input id="gp" type="number" placeholder="Price before GST (₹)"><input id="gr" type="number" placeholder="GST rate (%)"><button onclick="show('r9','GST: ₹'+(num('gp')*num('gr')/100).toFixed(2)+' | Total: ₹'+(num('gp')*(1+num('gr')/100)).toFixed(2))">Calculate</button><div class="result" id="r9"></div></section>
+    <section class="card" data-name="date difference"><h3>Date Difference Calculator</h3><input id="d1" type="date"><input id="d2" type="date"><button onclick="dates()">Calculate</button><div class="result" id="r10"></div></section>
+    <section class="card" data-name="bmi calculator"><h3>BMI Calculator</h3><input id="weight" type="number" placeholder="Weight (kg)"><input id="height" type="number" placeholder="Height (cm)"><button onclick="show('r11','BMI: '+(num('weight')/((num('height')/100)**2)).toFixed(1))">Calculate</button><div class="result" id="r11"></div></section>
+    <section class="card" data-name="calorie calculator"><h3>Calorie Calculator</h3><p>Estimate daily calories using a simple weight-based estimate.</p><input id="calw" type="number" placeholder="Weight (kg)"><button onclick="show('r12','Rough estimate: '+(num('calw')*30).toFixed(0)+' kcal/day. Individual needs vary.')">Estimate</button><div class="result" id="r12"></div></section>
+    <section class="card" data-name="average calculator"><h3>Average Calculator</h3><input id="av" placeholder="Numbers separated by commas"><button onclick="average()">Calculate</button><div class="result" id="r13"></div></section>
+    <section class="card" data-name="fraction calculator"><h3>Fraction Calculator</h3><input id="f1" type="number" placeholder="Numerator 1"><input id="f2" type="number" placeholder="Denominator 1"><input id="f3" type="number" placeholder="Numerator 2"><input id="f4" type="number" placeholder="Denominator 2"><button onclick="fraction()">Add fractions</button><div class="result" id="r14"></div></section>
+    <section class="card" data-name="ratio calculator"><h3>Ratio Calculator</h3><input id="ra" type="number" placeholder="First value"><input id="rb" type="number" placeholder="Second value"><button onclick="ratio()">Simplify ratio</button><div class="result" id="r15"></div></section>
+    <section class="card" data-name="profit loss calculator"><h3>Profit &amp; Loss Calculator</h3><input id="cost" type="number" placeholder="Cost price (₹)"><input id="sell" type="number" placeholder="Selling price (₹)"><button onclick="profit()">Calculate</button><div class="result" id="r16"></div></section>
+    <section class="card" data-name="sales tax calculator"><h3>Sales Tax Calculator</h3><input id="tp" type="number" placeholder="Price before tax"><input id="tr" type="number" placeholder="Tax rate (%)"><button onclick="show('r17','Tax: '+(num('tp')*num('tr')/100).toFixed(2)+' | Total: '+(num('tp')*(1+num('tr')/100)).toFixed(2))">Calculate</button><div class="result" id="r17"></div></section>
+    <section class="card" data-name="tip calculator"><h3>Tip Calculator</h3><input id="bill" type="number" placeholder="Bill amount"><input id="tip" type="number" placeholder="Tip (%)"><input id="people" type="number" placeholder="People sharing" value="1"><button onclick="tipCalc()">Calculate</button><div class="result" id="r18"></div></section>
+    <section class="card" data-name="unit converter"><h3>Unit Converter</h3><input id="km" type="number" placeholder="Kilometres"><button onclick="show('r19',num('km')+' km = '+(num('km')*0.621371).toFixed(3)+' miles')">Convert to miles</button><div class="result" id="r19"></div></section>
+    <section class="card" data-name="scientific calculator"><h3>Scientific Calculator</h3><input id="sc" type="number" placeholder="Enter a number"><button onclick="show('r20','Square: '+num('sc')**2+' | Square root: '+(num('sc')>=0?Math.sqrt(num('sc')).toFixed(4):'Not a real number'))">Square / Square root</button><div class="result" id="r20"></div></section>
+  </div>
+</main>
+<footer>© 2026 CalcNova · Free Calculators for Everyone</footer>
+<script>
+function num(id){return Number(document.getElementById(id).value)}
+function show(id,v){document.getElementById(id).textContent=v}
+function basic(){let a=num('a'),b=num('b'),o=document.getElementById('op').value;if(o==='/'&&b===0)return show('r1','Cannot divide by zero');show('r1','Result: '+({'+':a+b,'-':a-b,'*':a*b,'/':a/b}[o]))}
+function compound(){let p=num('ci'),r=num('cr')/100,y=num('cy');show('r3','Final amount: ₹'+(p*Math.pow(1+r,y)).toFixed(2)+' | Interest: ₹'+(p*Math.pow(1+r,y)-p).toFixed(2))}
+function emi(){let p=num('loan'),r=num('lr')/1200,n=num('ly')*12;let m=r===0?p/n:p*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);show('r4','Monthly EMI: ₹'+m.toFixed(2))}
+function age(){let d=new Date(document.getElementById('dob').value);if(!document.getElementById('dob').value||d>new Date())return show('r5','Enter a valid past date');let n=new Date(),y=n.getFullYear()-d.getFullYear();if(n<new Date(n.getFullYear(),d.getMonth(),d.getDate()))y--;show('r5','Age: '+y+' years')}
+function sip(){let m=num('sm'),r=num('srate')/1200,n=num('syears')*12;let v=r===0?m*n:m*(Math.pow(1+r,n)-1)/r*(1+r);show('r7','Estimated value: ₹'+v.toFixed(2)+' (not guaranteed)')}
+function dates(){let a=new Date(document.getElementById('d1').value),b=new Date(document.getElementById('d2').value);if(isNaN(a)||isNaN(b))return show('r10','Choose both dates');show('r10',Math.abs(Math.round((b-a)/86400000))+' days apart')}
+function average(){let a=document.getElementById('av').value.split(',').map(x=>Number(x.trim()));if(!a.length||a.some(Number.isNaN))return show('r13','Enter comma-separated numbers');show('r13','Average: '+(a.reduce((x,y)=>x+y,0)/a.length).toFixed(4))}
+function fraction(){let a=num('f1'),b=num('f2'),c=num('f3'),d=num('f4');if(!b||!d)return show('r14','Denominators must not be zero');show('r14','Result: '+(a*d+c*b)+'/'+(b*d)+' = '+(a/b+c/d))}
+function gcd(a,b){return b?gcd(b,a%b):Math.abs(a)}
+function ratio(){let a=num('ra'),b=num('rb');if(!a&&!b)return show('r15','Enter at least one non-zero value');let g=gcd(a,b);show('r15','Simplified ratio: '+(a/g)+':'+(b/g))}
+function profit(){let c=num('cost'),s=num('sell'),d=s-c;show('r16',(d>=0?'Profit: ₹':'Loss: ₹')+Math.abs(d).toFixed(2)+' ('+(c?Math.abs(d/c*100).toFixed(2):'—')+'%)')}
+function tipCalc(){let b=num('bill'),t=num('tip'),p=num('people');if(p<=0)return show('r18','People must be at least one');show('r18','Total: '+(b*(1+t/100)).toFixed(2)+' | Each pays: '+(b*(1+t/100)/p).toFixed(2))}
+function filterCards(){let q=document.getElementById('search').value.toLowerCase();document.querySelectorAll('.card').forEach(c=>c.style.display=c.dataset.name.includes(q)?'block':'none')}
+</script>
+</body>
+</html>
